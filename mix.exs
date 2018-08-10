@@ -7,9 +7,9 @@ defmodule Asciichart.MixProject do
       version: "1.0.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
+      package: package(),
       deps: deps(),
       aliases: aliases(),
-      # test coverage
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
@@ -19,12 +19,8 @@ defmodule Asciichart.MixProject do
         "coveralls.travis": :test,
         qa: :test
       ],
-      # docs
-      name: "asciichart",
-      source_url: "https://github.com/sndnv/asciichart",
-      homepage_url: "https://github.com/sndnv/asciichart",
       docs: [
-        main: "asciichart",
+        main: "Asciichart",
         extras: ["README.md"]
       ]
     ]
@@ -47,6 +43,42 @@ defmodule Asciichart.MixProject do
     [
       build: ["deps.get", "clean", "format", "compile"],
       qa: ["build", "coveralls.html"]
+    ]
+  end
+
+  def coverage do
+    [
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.travis": :test,
+        qa: :test
+      ]
+    ]
+  end
+
+  @github_url "https://github.com/sndnv/asciichart"
+
+  def package do
+    [
+      name: :asciichart,
+      description: "ASCII terminal line charts with no dependencies",
+      files: ["lib", "mix.exs", "LICENSE", "README.md"],
+      maintainers: ["Angel Sanadinov"],
+      licenses: ["Apache 2.0"],
+      links: %{
+        "Github" => @github_url,
+        "Ported from kroitor/asciichart" => "https://github.com/kroitor/asciichart"
+      },
+      source_url: @github_url,
+      homepage_url: @github_url,
+      docs: [
+        main: "asciichart",
+        extras: ["README.md"]
+      ]
     ]
   end
 end
