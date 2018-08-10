@@ -32,10 +32,10 @@ chart |> IO.puts()
 ```
 
 ## Options
-One or more of following settings can be provided:
-- `offset` - the number of characters to set as the chart's offset (left)
+One or more of the following settings can be provided:
+- `offset` - number of characters to set as the chart's (left) offset
 - `height` - adjusts the height of the chart
-- `padding` - one or more characters to use for the label's padding (left)
+- `padding` - one or more characters to use for the label's (left) padding
 
 ```elixir
 {:ok, chart} = Asciichart.plot([1, 2, 5, 5, 4, 3, 2, 100, 0], height: 3, offset: 10, padding: "__")
