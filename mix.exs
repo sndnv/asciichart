@@ -16,6 +16,7 @@ defmodule Asciichart.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
+        "coveralls.travis": :test,
         qa: :test
       ],
       # docs
