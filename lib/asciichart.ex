@@ -6,7 +6,6 @@ defmodule Asciichart.Charset do
     Defines different character sets for plotting.
   """
 
-  @spec square() :: String.t()
   def round do
     %__MODULE__{
       topleft: <<0x256D::utf8>>,

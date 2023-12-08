@@ -36,6 +36,7 @@ One or more of the following settings can be provided:
 - `offset` - number of characters to set as the chart's (left) offset
 - `height` - adjusts the height of the chart
 - `padding` - one or more characters to use for the label's (left) padding
+- `charset` - a customizable character set. See `Asciichart.Charset`.
 
 ```elixir
 {:ok, chart} = Asciichart.plot([1, 2, 5, 5, 4, 3, 2, 100, 0], height: 3, offset: 10, padding: "__")
@@ -56,7 +57,17 @@ chart |> IO.puts()
 
 Asciichart.plot([])
 {:error, "No data"}
+```
+If you want to change the character set, you can use a predefined one in `Asciichart.Charset` or create your own.
+```elixir
+{:ok, chart} = Asciichart.plot([1, 2, 5, 5, 4, 3, 2, 0], height: 5, charset: Asciichart.Charset.single_char("*"))
+chart |> IO.puts()
 
+5.00 ┤ ***
+3.75 ┤ * **
+2.50 ┤ *  **
+1.25 ┤**   **
+0.00 **     *
 ```
 
 ## Versioning
