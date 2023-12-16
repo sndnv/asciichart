@@ -39,7 +39,7 @@ defmodule AsciichartTest do
         " 1511856108848.33 ┤││││││││││││││││││││││││││││││││││││││││││││││││││  ",
         "  463091532463.40 ┤││││││││││││││││││││││││││││││││││││││││││││││││││  ",
         " -585673043921.53 ┤││││││││││││││││││││││││││││││││││││││││││││││││││  ",
-        "-1634437620306.47 ┼││││││││││││││││││││││││││││││││││││││││││││││││││  ",
+        "-1634437620306.47 ┤││││││││││││││││││││││││││││││││││││││││││││││││││  ",
         "-2683202196691.40 ┤││││││││││││││││││││││││││││││││││││││││││││││││││  ",
         "-3731966773076.33 ┤││││││││││││││││││││││││││││││││││││││││││││││││││  ",
         "-4780731349461.27 ┤││││││││││││││││││││││││││││││││││││││││││││││││││  ",
@@ -97,5 +97,43 @@ defmodule AsciichartTest do
 
     {:error, message} = Asciichart.plot([])
     assert message == "No data"
+  end
+
+  test "square charset" do
+    series = (1..6 |> Enum.to_list()) ++ (6..1 |> Enum.to_list())
+
+    expected_chart =
+      [
+        "6.00 ┤    ┌─┐      ",
+        "5.00 ┤   ┌┘ └┐     ",
+        "4.00 ┤  ┌┘   └┐    ",
+        "3.00 ┤ ┌┘     └┐   ",
+        "2.00 ┤┌┘       └┐  ",
+        "1.00 ┼┘         └  ",
+        "                "
+      ]
+      |> Enum.join("\n")
+
+    {:ok, actual_chart} = Asciichart.plot(series, charset: Asciichart.Charset.square())
+    assert expected_chart == actual_chart
+  end
+
+  test "single charset" do
+    series = (1..6 |> Enum.to_list()) ++ (6..1 |> Enum.to_list())
+
+    expected_chart =
+      [
+        "6.00 ┤    ***      ",
+        "5.00 ┤   ** **     ",
+        "4.00 ┤  **   **    ",
+        "3.00 ┤ **     **   ",
+        "2.00 ┤**       **  ",
+        "1.00 **         *  ",
+        "                "
+      ]
+      |> Enum.join("\n")
+
+    {:ok, actual_chart} = Asciichart.plot(series, charset: Asciichart.Charset.single_char("*"))
+    assert expected_chart == actual_chart
   end
 end
