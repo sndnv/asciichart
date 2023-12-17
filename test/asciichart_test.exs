@@ -136,4 +136,10 @@ defmodule AsciichartTest do
     {:ok, actual_chart} = Asciichart.plot(series, charset: Asciichart.Charset.single_char("*"))
     assert expected_chart == actual_chart
   end
+
+  test "charset single char validation" do
+    assert_raise ArgumentError, fn ->
+      Asciichart.Charset.single_char("**")
+    end
+  end
 end
