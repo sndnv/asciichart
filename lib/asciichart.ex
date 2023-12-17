@@ -1,6 +1,6 @@
 defmodule Asciichart.Charset do
   @enforce_keys [:topleft, :topright, :bottomleft, :bottomright, :dash, :pipe, :axis, :firstval]
-  defstruct [:topleft, :topright, :bottomleft, :bottomright, :dash, :pipe, :axis, :firstval]
+  defstruct @enforce_keys
 
   @moduledoc """
     Defines different character sets for plotting.
@@ -45,7 +45,7 @@ defmodule Asciichart.Charset do
         firstval: char
       }
     else
-      raise("must provide a single character, got \"#{char}\"")
+      raise ArgumentError, message: "expected single character but [#{char}] was provided"
     end
   end
 end
