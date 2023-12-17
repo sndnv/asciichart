@@ -14,7 +14,7 @@ Add `asciichart` to the list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:asciichart, "~> 1.0"}]
+  [{:asciichart, "~> <version>"}]
 end
 ```
 
@@ -37,6 +37,7 @@ One or more of the following settings can be provided:
 - `height` - adjusts the height of the chart
 - `padding` - one or more characters to use for the label's (left) padding
 - `charset` - a customizable character set. See `Asciichart.Charset`.
+- `precision` - number of fractional digits to keep for floating-point values
 
 ```elixir
 {:ok, chart} = Asciichart.plot([1, 2, 5, 5, 4, 3, 2, 100, 0], height: 3, offset: 10, padding: "__")
