@@ -1,0 +1,35 @@
+name: asciichart Build
+
+on: [push, pull_request]
+
+env:
+  MIX_ENV: test
+
+jobs:
+  elixir:
+    runs-on: ubuntu-latest
+    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    strategy:
+      matrix:
+        otp: ['24.3']
+        elixir: ['1.13', '1.14', '1.15']
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
+
+      - name: Run QA
+        run: |
+          mix deps.get
+          mix deps.compile
+          mix test
+          mix coveralls.json
+
+      - name: Push Coverage Result
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
