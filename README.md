@@ -1,6 +1,6 @@
 # asciichart
 
-[![Hex version badge](https://img.shields.io/hexpm/v/asciichart.svg)](https://hex.pm/packages/asciichart) [![Travis](https://travis-ci.org/sndnv/asciichart.svg?branch=master)](https://travis-ci.org/sndnv/asciichart) [![Coverage Status](https://coveralls.io/repos/github/sndnv/asciichart/badge.svg?branch=master)](https://coveralls.io/github/sndnv/asciichart?branch=master) [![license](https://img.shields.io/github/license/sndnv/asciichart.svg)]()
+[![Hex version badge](https://img.shields.io/hexpm/v/asciichart.svg)](https://hex.pm/packages/asciichart) [![codecov](https://codecov.io/gh/sndnv/asciichart/graph/badge.svg?token=EVAYGZRRZB)](https://codecov.io/gh/sndnv/asciichart) [![license](https://img.shields.io/github/license/sndnv/asciichart.svg)]()
 
 Terminal ASCII line charts in Elixir with no dependencies.
 
