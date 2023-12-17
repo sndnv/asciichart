@@ -4,8 +4,8 @@ defmodule Asciichart.MixProject do
   def project do
     [
       app: :asciichart,
-      version: "1.1.0",
-      elixir: "~> 1.7",
+      version: "1.1.1-SNAPSHOT",
+      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
@@ -16,7 +16,7 @@ defmodule Asciichart.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
-        "coveralls.travis": :test,
+        "coveralls.json": :test,
         qa: :test
       ],
       docs: [
@@ -34,8 +34,8 @@ defmodule Asciichart.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.9.1", only: :test}
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.18.0", only: :test}
     ]
   end
 
