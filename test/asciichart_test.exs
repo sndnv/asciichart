@@ -8,6 +8,7 @@ defmodule AsciichartTest do
   test "renders charts" do
     series = (1..6 |> Enum.to_list()) ++ (6..1 |> Enum.to_list())
 
+    # default config
     expected_chart =
       [
         "6.00 ┤    ╭─╮      ",
@@ -21,6 +22,54 @@ defmodule AsciichartTest do
       |> Enum.join("\n")
 
     {:ok, actual_chart} = Asciichart.plot(series)
+    assert expected_chart == actual_chart
+
+    # with precision=3
+    expected_chart =
+      [
+        "6.000 ┤    ╭─╮      ",
+        "5.000 ┤   ╭╯ ╰╮     ",
+        "4.000 ┤  ╭╯   ╰╮    ",
+        "3.000 ┤ ╭╯     ╰╮   ",
+        "2.000 ┤╭╯       ╰╮  ",
+        "1.000 ┼╯         ╰  ",
+        "                "
+      ]
+      |> Enum.join("\n")
+
+    {:ok, actual_chart} = Asciichart.plot(series, precision: 3)
+    assert expected_chart == actual_chart
+
+    # with precision=0
+    expected_chart =
+      [
+        "  6 ┤    ╭─╮      ",
+        "  5 ┤   ╭╯ ╰╮     ",
+        "  4 ┤  ╭╯   ╰╮    ",
+        "  3 ┤ ╭╯     ╰╮   ",
+        "  2 ┤╭╯       ╰╮  ",
+        "  1 ┼╯         ╰  ",
+        "                "
+      ]
+      |> Enum.join("\n")
+
+    {:ok, actual_chart} = Asciichart.plot(series, precision: 0)
+    assert expected_chart == actual_chart
+
+    # with precision=1
+    expected_chart =
+      [
+        "6.0 ┤    ╭─╮      ",
+        "5.0 ┤   ╭╯ ╰╮     ",
+        "4.0 ┤  ╭╯   ╰╮    ",
+        "3.0 ┤ ╭╯     ╰╮   ",
+        "2.0 ┤╭╯       ╰╮  ",
+        "1.0 ┼╯         ╰  ",
+        "                "
+      ]
+      |> Enum.join("\n")
+
+    {:ok, actual_chart} = Asciichart.plot(series, precision: 1)
     assert expected_chart == actual_chart
 
     series =

@@ -65,6 +65,7 @@ defmodule Asciichart do
     * :height - adjusts the height of the chart
     * :padding - one or more characters to use for the label's padding (left)
     * :charset - a customizable character set
+    * :precision - number of fractional digits to keep for floating-point values
 
   ## Examples
       iex> Asciichart.plot([1, 2, 3, 3, 2, 1])
@@ -94,6 +95,15 @@ defmodule Asciichart do
           _50.00    ┤      ││
           __0.00    ┼──────╯╰
 
+      iex> Asciichart.plot([1, 2, 5, 5, 4, 3, 2, 100, 0], height: 3, offset: 10, padding: "__", precision: 3)
+      {:ok, "   100.000     ┤      ╭╮  \n   _50.000     ┤      ││  \n   __0.000     ┼──────╯╰  \n                    "}
+
+      # should render as
+
+          100.000     ┤      ╭╮
+          _50.000     ┤      ││
+          __0.000     ┼──────╯╰
+
 
       # Rendering of empty charts is not supported
 
@@ -108,8 +118,6 @@ defmodule Asciichart do
         {:error, "No data"}
 
       [_ | _] ->
-        cs = if cfg[:charset], do: cfg[:charset], else: Asciichart.Charset.round()
-
         minimum = Enum.min(series)
         maximum = Enum.max(series)
 
@@ -117,6 +125,8 @@ defmodule Asciichart do
         offset = cfg[:offset] || 3
         height = if cfg[:height], do: cfg[:height] - 1, else: interval
         padding = cfg[:padding] || " "
+        charset = if cfg[:charset], do: cfg[:charset], else: Asciichart.Charset.round()
+        precision = cfg[:precision] || 2
         ratio = height / interval
         min2 = Float.floor(minimum * ratio)
         max2 = Float.ceil(maximum * ratio)
@@ -137,15 +147,17 @@ defmodule Asciichart do
 
         max_label_size =
           (maximum / 1)
-          |> Float.round(2)
-          |> :erlang.float_to_binary(decimals: 2)
+          |> Float.round(precision)
+          |> :erlang.float_to_binary(decimals: precision)
           |> String.length()
+          |> max(3)
 
         min_label_size =
           (minimum / 1)
-          |> Float.round(2)
-          |> :erlang.float_to_binary(decimals: 2)
+          |> Float.round(precision)
+          |> :erlang.float_to_binary(decimals: precision)
           |> String.length()
+          |> max(3)
 
         label_size = max(min_label_size, max_label_size)
 
@@ -155,17 +167,17 @@ defmodule Asciichart do
           |> Enum.reduce(result, fn y, map ->
             label =
               (maximum - (y - intmin2) * interval / rows)
-              |> Float.round(2)
-              |> :erlang.float_to_binary(decimals: 2)
+              |> Float.round(precision)
+              |> :erlang.float_to_binary(decimals: precision)
               |> String.pad_leading(label_size, padding)
 
             updated_map = put_in(map[y - intmin2][max(offset - String.length(label), 0)], label)
-            put_in(updated_map[y - intmin2][offset - 1], cs.axis)
+            put_in(updated_map[y - intmin2][offset - 1], charset.axis)
           end)
 
         # first value
         y0 = trunc(Enum.at(series, 0) * ratio - min2)
-        result = put_in(result[rows - y0][offset - 1], cs.firstval)
+        result = put_in(result[rows - y0][offset - 1], charset.firstval)
 
         # plot the line
         result =
@@ -175,24 +187,24 @@ defmodule Asciichart do
             y1 = trunc(Enum.at(series, x + 1) * ratio - intmin2)
 
             if y0 == y1 do
-              put_in(map[rows - y0][x + offset], cs.dash)
+              put_in(map[rows - y0][x + offset], charset.dash)
             else
               updated_map =
                 put_in(
                   map[rows - y1][x + offset],
-                  if(y0 > y1, do: cs.bottomleft, else: cs.topleft)
+                  if(y0 > y1, do: charset.bottomleft, else: charset.topleft)
                 )
 
               updated_map =
                 put_in(
                   updated_map[rows - y0][x + offset],
-                  if(y0 > y1, do: cs.topright, else: cs.bottomright)
+                  if(y0 > y1, do: charset.topright, else: charset.bottomright)
                 )
 
               (min(y0, y1) + 1)..max(y0, y1)
               |> Enum.drop(-1)
               |> Enum.reduce(updated_map, fn y, map ->
-                put_in(map[rows - y][x + offset], cs.pipe)
+                put_in(map[rows - y][x + offset], charset.pipe)
               end)
             end
           end)
