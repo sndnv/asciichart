@@ -12,10 +12,6 @@ on:
           - patch
           - minor
           - major
-      verbose:
-        description: 'Enable debug logging during release'
-        required: false
-        type: boolean
 
 jobs:
   release:
@@ -24,25 +20,12 @@ jobs:
     if: github.ref == 'refs/heads/master'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: sndnv/action-release-next@v1
         with:
-          ssh-key: ${{secrets.RELEASE_KEY}}
-          ref: master
-
-      - name: Setup Python 3
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Release project
-        run: |
-          pip install semver
-          git config --global user.name ${{github.actor}}
-          git config --global user.email ${{github.actor}}@users.noreply.github.com
-          ./release.py $VERBOSE --next $NEXT_VERSION
-          git push
-          git push --tags
-
-        env:
-          NEXT_VERSION: ${{ inputs.next_version }}
-          VERBOSE: ${{ inputs.verbose && '--verbose' || '' }}
+          next_version: ${{ inputs.next_version }}
+          target_branch: master
+          release_key: ${{secrets.RELEASE_KEY}}
+          version_files_json: |
+            {
+              "mix.exs": "\\s*version: \"(\\d+\\.\\d+\\.\\d+.*)\",$"
+            }
